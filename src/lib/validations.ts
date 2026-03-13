@@ -13,9 +13,9 @@ export const registerSchema = z.object({
 
 export type RegisterSchema = z.infer<typeof registerSchema>
 
-export const loginSchema = z.object({
-    email: z.string().email("Email inválido"),
-    password: z.string().min(1, "Senha é obrigatória"),
+export const linkSchema = z.object({
+    title: z.string().min(1, "Título é obrigatório").max(50, "Título muito longo"),
+    url: z.string().url("URL inválida"),
 })
 
-export type LoginSchema = z.infer<typeof loginSchema>
+export type LinkSchema = z.infer<typeof linkSchema>
