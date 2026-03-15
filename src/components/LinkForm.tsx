@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { createLinkAction } from "@/actions/links"
 import { useRouter } from "next/navigation"
+import { createLinkAction } from "@/actions/links"
 
 export default function LinkForm() {
     const router = useRouter()
@@ -32,19 +32,36 @@ export default function LinkForm() {
         setLoading(false)
         router.refresh()
     }
+
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-8">
-            <h2 className="text-lg font-semibold">Adicionar link</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 mb-8">
+            <h2 className="text-zinc-400 text-sm font-medium uppercase tracking-wider">Adicionar link</h2>
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3">
+                    <p className="text-red-400 text-sm">{error}</p>
+                </div>
+            )}
 
-            <input name="title" placeholder="Título (ex: GitHub)" required
-                className="border p-2 rounded" />
-            <input name="url" type="url" placeholder="URL (ex: https://github.com/...)" required
-                className="border p-2 rounded" />
+            <input
+                name="title"
+                placeholder="Título (ex: GitHub)"
+                required
+                className="bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-600 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+            />
+            <input
+                name="url"
+                type="url"
+                placeholder="URL (ex: https://github.com/...)"
+                required
+                className="bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-600 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-violet-500 transition-colors"
+            />
 
-            <button type="submit" disabled={loading}
-                className="bg-black text-white p-2 rounded disabled:opacity-50">
+            <button
+                type="submit"
+                disabled={loading}
+                className="bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white font-medium rounded-lg py-3 text-sm transition-colors"
+            >
                 {loading ? "Adicionando..." : "Adicionar link"}
             </button>
         </form>

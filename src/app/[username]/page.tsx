@@ -20,14 +20,20 @@ export default async function ProfilePage({ params }: Props) {
     if (!user) notFound()
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-8">
+        <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-8">
             <div className="w-full max-w-sm flex flex-col items-center gap-6">
-                <div className="flex flex-col items-center gap-2">
-                    <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold">
+
+                <div className="flex flex-col items-center gap-3">
+                    <div className="w-20 h-20 rounded-2xl bg-violet-600 flex items-center justify-center text-3xl font-bold text-white">
                         {user.name[0].toUpperCase()}
                     </div>
-                    <h1 className="text-xl font-bold">{user.name}</h1>
-                    {user.bio && <p className="text-gray-500 text-sm text-center">{user.bio}</p>}
+                    <div className="text-center">
+                        <h1 className="text-xl font-bold text-white">{user.name}</h1>
+                        <p className="text-zinc-500 text-sm">@{user.username}</p>
+                        {user.bio && (
+                            <p className="text-zinc-400 text-sm mt-2 text-center">{user.bio}</p>
+                        )}
+                    </div>
                 </div>
 
                 <ul className="w-full flex flex-col gap-3">
@@ -37,17 +43,23 @@ export default async function ProfilePage({ params }: Props) {
                                 href={link.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block w-full text-center border p-3 rounded-lg hover:bg-gray-50 transition"
+                                className="flex items-center justify-between w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-violet-500/50 text-white px-5 py-4 rounded-xl transition-all group"
                             >
-                                {link.title}
+                                <span className="font-medium text-sm">{link.title}</span>
+                                <span className="text-zinc-600 group-hover:text-violet-400 transition-colors text-sm">→</span>
                             </a>
                         </li>
                     ))}
                 </ul>
 
                 {user.links.length === 0 && (
-                    <p className="text-gray-400">Nenhum link cadastrado ainda.</p>
+                    <p className="text-zinc-600 text-sm">Nenhum link cadastrado ainda.</p>
                 )}
+
+                <p className="text-zinc-700 text-xs mt-4">
+                    feito com <span className="text-violet-500">DevLinks</span>
+                </p>
+
             </div>
         </div >
     )
