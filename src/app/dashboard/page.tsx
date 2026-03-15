@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import LinkForm from "@/components/LinkForm"
 import LinkList from "@/components/LinkList"
+import LogoutButton from "@/components/LogoutButton"
 
 export default async function DashboardPage() {
     const session = await auth()
@@ -31,6 +32,7 @@ export default async function DashboardPage() {
                         >
                             Ver perfil →
                         </a>
+                        <LogoutButton />
                     </div>
                 </div>
             </header >
