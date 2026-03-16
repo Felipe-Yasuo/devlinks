@@ -8,6 +8,7 @@ type Props = {
     user: {
         name: string
         bio: string | null
+        avatar: string | null
     }
 }
 
@@ -16,6 +17,15 @@ export default function EditProfileModal({ user }: Props) {
     const [isOpen, setIsOpen] = useState(false)
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(user.avatar)
+    const [avatarFile, setAvatarFile] = useState<File | null>(null)
+
+    function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0]
+        if (!file) return
+        setAvatarFile(file)
+        setAvatarPreview(URL.createObjectURL(file))
+    }
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -25,9 +35,32 @@ export default function EditProfileModal({ user }: Props) {
         const form = e.currentTarget
         const formData = new FormData(form)
 
+        let avatarUrl = user.avatar
+
+        if (avatarFile) {
+            const uploadData = new FormData()
+            uploadData.append("file", avatarFile)
+
+            const res = await fetch("/api/upload", {
+                method: "POST",
+                body: uploadData,
+            })
+
+            const data = await res.json()
+
+            if (data.error) {
+                setError("Erro ao fazer upload da imagem")
+                setLoading(false)
+                return
+            }
+
+            avatarUrl = data.url
+        }
+
         const result = await updateProfileAction({
             name: formData.get("name") as string,
             bio: formData.get("bio") as string,
+            avatar: avatarUrl,
         })
 
         if (result.error) {
@@ -66,6 +99,27 @@ export default function EditProfileModal({ user }: Props) {
                                     <p className="text-red-400 text-sm">{error}</p>
                                 </div>
                             )}
+
+                            <div className="flex flex-col items-center gap-3 mb-2">
+                                <div className="w-20 h-20 rounded-2xl overflow-hidden bg-zinc-800 flex items-center justify-center">
+                                    {avatarPreview ? (
+                                        <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-2xl font-bold text-white">
+                                            {user.name[0].toUpperCase()}
+                                        </span>
+                                    )}
+                                </div>
+                                <label className="text-violet-400 hover:text-violet-300 text-sm cursor-pointer transition-colors">
+                                    Trocar foto
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleAvatarChange}
+                                        className="hidden"
+                                    />
+                                </label>
+                            </div>
 
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-zinc-400 text-sm">Nome</label>

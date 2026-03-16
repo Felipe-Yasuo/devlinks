@@ -8,6 +8,7 @@ import { z } from "zod"
 const profileSchema = z.object({
     name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
     bio: z.string().max(160, "Bio deve ter no máximo 160 caracteres").optional(),
+    avatar: z.string().url().optional().nullable(),
 })
 
 export async function updateProfileAction(data: unknown) {
@@ -19,11 +20,11 @@ export async function updateProfileAction(data: unknown) {
         return { error: parsed.error.issues[0].message }
     }
 
-    const { name, bio } = parsed.data
+    const { name, bio, avatar } = parsed.data
 
     await prisma.user.update({
         where: { id: session.user.id },
-        data: { name, bio },
+        data: { name, bio, avatar },
     })
 
     revalidatePath("/dashboard")

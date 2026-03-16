@@ -37,7 +37,11 @@ export default async function DashboardPage() {
                         >
                             Ver perfil →
                         </a>
-                        <EditProfileModal user={{ name: user?.name ?? "", bio: user?.bio ?? null }} />
+                        <EditProfileModal user={{
+                            name: user?.name ?? "",
+                            bio: user?.bio ?? null,
+                            avatar: user?.avatar ?? null
+                        }} />
                         <LogoutButton />
                     </div>
                 </div>

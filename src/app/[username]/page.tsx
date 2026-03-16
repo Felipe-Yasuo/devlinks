@@ -24,8 +24,18 @@ export default async function ProfilePage({ params }: Props) {
             <div className="w-full max-w-sm flex flex-col items-center gap-6">
 
                 <div className="flex flex-col items-center gap-3">
-                    <div className="w-20 h-20 rounded-2xl bg-violet-600 flex items-center justify-center text-3xl font-bold text-white">
-                        {user.name[0].toUpperCase()}
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden bg-violet-600 flex items-center justify-center">
+                        {user.avatar ? (
+                            <img
+                                src={user.avatar}
+                                alt={user.name}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <span className="text-3xl font-bold text-white">
+                                {user.name[0].toUpperCase()}
+                            </span>
+                        )}
                     </div>
                     <div className="text-center">
                         <h1 className="text-xl font-bold text-white">{user.name}</h1>
