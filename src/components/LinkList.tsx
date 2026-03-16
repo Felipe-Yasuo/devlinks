@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { deleteLinkAction, updateLinkAction, reorderLinksAction } from "@/actions/links"
 import { useRouter } from "next/navigation"
 import {
@@ -132,6 +132,11 @@ export default function LinkList({ links: initialLinks }: { links: Link[] }) {
     const [editingId, setEditingId] = useState<string | null>(null)
     const [editTitle, setEditTitle] = useState("")
     const [editUrl, setEditUrl] = useState("")
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -178,6 +183,23 @@ export default function LinkList({ links: initialLinks }: { links: Link[] }) {
             <div className="border border-dashed border-zinc-800 rounded-xl p-10 text-center">
                 <p className="text-zinc-600 text-sm">Nenhum link ainda. Adicione um acima!</p>
             </div>
+        )
+    }
+
+    if (!isMounted) {
+        return (
+            <ul className="flex flex-col gap-3">
+                {links.map((link) => (
+                    <li key={link.id} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-white font-medium text-sm">{link.title}</p>
+                                <p className="text-zinc-500 text-xs mt-0.5">{link.url}</p>
+                            </div>
+                        </div>
+                    </li>
+                ))}
+            </ul>
         )
     }
 

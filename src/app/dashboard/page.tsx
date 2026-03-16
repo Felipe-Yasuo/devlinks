@@ -3,9 +3,14 @@ import { prisma } from "@/lib/prisma"
 import LinkForm from "@/components/LinkForm"
 import LinkList from "@/components/LinkList"
 import LogoutButton from "@/components/LogoutButton"
+import EditProfileModal from "@/components/EditProfileModal"
 
 export default async function DashboardPage() {
     const session = await auth()
+
+    const user = await prisma.user.findUnique({
+        where: { id: session?.user?.id as string },
+    })
 
     const links = await prisma.link.findMany({
         where: { userId: session?.user?.id as string },
@@ -32,6 +37,7 @@ export default async function DashboardPage() {
                         >
                             Ver perfil →
                         </a>
+                        <EditProfileModal user={{ name: user?.name ?? "", bio: user?.bio ?? null }} />
                         <LogoutButton />
                     </div>
                 </div>
