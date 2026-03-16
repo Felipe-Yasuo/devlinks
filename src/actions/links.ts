@@ -62,3 +62,19 @@ export async function deleteLinkAction(id: string) {
     revalidatePath("/dashboard")
     return { success: true }
 }
+
+export async function reorderLinksAction(links: { id: string; order: number }[]) {
+    await getSession()
+
+    await Promise.all(
+        links.map((link) =>
+            prisma.link.update({
+                where: { id: link.id },
+                data: { order: link.order },
+            })
+        )
+    )
+
+    revalidatePath("/dashboard")
+    return { success: true }
+}
